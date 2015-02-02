@@ -1,0 +1,16 @@
+<div class="container">
+  <div class="row">
+    <h3>Events</h3>
+    <div class="column">
+      <table class="table">
+        <tbody>
+        <% @events.each do |event| %>
+            <tr>
+              <%= render event %>
+            </tr>
+        <% end %>
+        </tbody>
+      </table>
+    </div>
+  </div>
+</div>

@@ -1,0 +1,37 @@
+<td><h3><%= @event.event_date %> <%= @event.description %></h3></td>
+
+<br>
+<br>
+
+<div class="right important">
+  <%= button_to "Add new invitee", new_invitee_path, :class => 'button right', method: "get" %>
+</div>
+
+<div class="column">
+  <table class="table">
+    <tbody>
+    <tr>
+      <th>Photo</th>
+      <th>Name</th>
+      <th>Family Name</th>
+      <th>Catogory</th>
+      <th>Region</th>
+      <th>Contact</th>
+      <th>People invited</th>
+      <th>People brought</th>
+    </tr>
+    <% @event_invitees.each do |event_invitees| %>
+        <tr>
+          <td><%= image_tag event_invitees.invitee.photo.url(:thumb) %></td>
+          <td><%= event_invitees.invitee.name %></td>
+          <td><%= event_invitees.invitee.family_name %></td>
+          <td><%= event_invitees.invitee.category %></td>
+          <td><%= event_invitees.invitee.region %></td>
+          <td><%= event_invitees.invitee.contact_number %></td>
+          <td><%= event_invitees.number_of_people_invited %></td>
+          <td><%= event_invitees.number_of_people_brought %></td>
+        </tr>
+    <% end %>
+    </tbody>
+  </table>
+</div>
