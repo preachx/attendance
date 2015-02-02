@@ -20,6 +20,14 @@ class EventsController < ApplicationController
     respond_with event.invitees.where(hash).where(where_condition.join(" and "))
   end
 
+  def update_invitee_people_count
+    event = Event.find(params[:event_id])
+    invitee = Invitee.find(params[:invitee_id])
+    event_invitee = EventInvitee.where(event: event, invitee: invitee).first
+    event_invitee.update_attribute(:number_of_people_brought, params[:number_of_people_brought])
+    respond_with event_invitee
+  end
+
   def show
     @event = Event.find(params[:id])
     @event_invitees = EventInvitee.where(event: @event).includes(:invitee)

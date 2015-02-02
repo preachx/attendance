@@ -17,7 +17,6 @@ class InviteeController < ApplicationController
       format.json {render text: @invitee.to_json(:only => [:id,:name,:family_name,:category, :region, :contact_number], :methods => [:photo_url])}
       format.html {render text: "something"}
     end
-
   end
 
   def update
