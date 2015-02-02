@@ -1,7 +1,7 @@
 class Invitee < ActiveRecord::Base
   has_many :event_invitees
   has_many :events, through: :event_invitees
-  has_attached_file :photo, :styles => { :medium => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
+  has_attached_file :photo, :styles => { :original => "300x300>", :thumb => "100x100>" }, :default_url => "/images/:style/missing.png"
   validates_attachment_content_type :photo, :content_type => /\Aimage\/.*\Z/
 
   CATEGORIES = [:general, :vip, :vvip]
@@ -11,6 +11,10 @@ class Invitee < ActiveRecord::Base
 
   def self.categories
     CATEGORIES
+  end
+
+  def photo_url
+    photo.url(:original)
   end
 
 end

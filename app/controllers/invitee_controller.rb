@@ -1,5 +1,7 @@
 class InviteeController < ApplicationController
 
+  respond_to :json, :html
+
   def new
     @invitee = Invitee.new
     @events = Event.all
@@ -11,6 +13,11 @@ class InviteeController < ApplicationController
 
   def show
     @invitee = Invitee.find(params[:id])
+    respond_to do |format|
+      format.json {render text: @invitee.to_json(:only => [:id,:name,:family_name,:category, :region, :contact_number], :methods => [:photo_url])}
+      format.html {render text: "something"}
+    end
+
   end
 
   def update

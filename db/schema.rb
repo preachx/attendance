@@ -13,6 +13,9 @@
 
 ActiveRecord::Schema.define(version: 20150202111642) do
 
+  # These are extensions that must be enabled in order to support this database
+  enable_extension "plpgsql"
+
   create_table "event_invitees", force: true do |t|
     t.integer  "invitee_id"
     t.integer  "event_id"
