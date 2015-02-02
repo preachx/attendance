@@ -30,7 +30,7 @@ class EventsController < ApplicationController
 
   def show
     @event = Event.find(params[:id])
-    @event_invitees = EventInvitee.where(event: @event).includes(:invitee)
+    @event_invitees = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).order("invitees.family_name")
   end
 
   def update
