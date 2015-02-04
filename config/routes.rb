@@ -4,7 +4,7 @@ Rails.application.routes.draw do
   devise_for :users
   resources :users
   resources :invitee
-  get "events/search" => 'events#search'
+  get "events/today/invitees" => 'events#search'
   get "events/all" => 'events#get_all'
   put "events/update_invitee_people_count" => 'events#update_invitee_people_count'
   resources :events

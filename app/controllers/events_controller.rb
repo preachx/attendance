@@ -10,14 +10,8 @@ class EventsController < ApplicationController
   end
 
   def search
-    event = Event.find(params[:event_id])
-    hash = {}
-    hash[:category] = params[:category] if params[:category]
-    where_condition = []
-    [:name, :family_name, :region].each do |param|
-      where_condition << " #{param} like '%#{params[param]}%' " if params[param]
-    end
-    respond_with event.invitees.where(hash).where(where_condition.join(" and "))
+    event = Event.where(event_date: Time.now.to_date).first
+    respond_with({invitees: event.invitees})
   end
 
   def update_invitee_people_count
