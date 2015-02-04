@@ -11,7 +11,7 @@ class EventsController < ApplicationController
 
   def search
     event = Event.where(event_date: Time.now.to_date).first
-    respond_with({invitees: event.invitees})
+    respond_with({event: event, invitees: event.invitees})
   end
 
   def update_invitee_people_count
