@@ -6,7 +6,13 @@
 <div class="right important">
   <%= button_to "Add new invitee", new_invitee_path, :class => 'button right', method: "get" %>
 </div>
-
+<div class="left important">
+  <%= form_for :invitee, :url => event_path, :html => { :method => :get} do |f| %>
+      <%= hidden_field(:event,:id) %>
+<%= f.text_field :search_string, :autofocus => true, class: 'form-control' %>
+  <%= f.submit 'Search', :class => 'button right' %>>
+  <% end %>
+</div>
 <div class="column">
   <table class="table">
     <tbody>

@@ -13,18 +13,27 @@ class EventsController < ApplicationController
     event = Event.where(event_date: Time.now.to_date).first
     respond_with({event: event, invitees: event.invitees})
   end
+  #
+  # def advanced_search
+  #   search_string = params[:search_string];
+  #   @event = Event.find(params[:event][:id])
+  #   @event_invitees = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).where("name like '%#{search_string}%'")
+  #   render event_path
+  # end
 
   def update_invitee_people_count
     event = Event.find(params[:event_id])
     invitee = Invitee.find(params[:invitee_id])
     event_invitee = EventInvitee.where(event: event, invitee: invitee).first
     event_invitee.update_attribute(:number_of_people_brought, params[:number_of_people_brought])
-    respond_with event_invitee
+    respond_with({"eventInvitee" => event_invitee})
   end
 
   def show
     @event = Event.find(params[:id])
-    @event_invitees = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).order("invitees.family_name")
+    eis = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).order("invitees.family_name")
+    eis = eis.where("name like '%#{params[:invitee][:search_string]}%'") if params[:invitee][:search_string]
+    @event_invitees = eis
   end
 
   def update
