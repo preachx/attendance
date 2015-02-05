@@ -32,7 +32,7 @@ class EventsController < ApplicationController
   def show
     @event = Event.find(params[:id])
     eis = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).order("invitees.family_name")
-    eis = eis.where("name like '%#{params[:invitee][:search_string]}%'") if params[:invitee][:search_string]
+    eis = eis.where("name like '%#{params[:invitee][:search_string]}%'") if params[:invitee] && params[:invitee][:search_string]
     @event_invitees = eis
   end
 
