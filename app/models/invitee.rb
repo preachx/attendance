@@ -17,4 +17,11 @@ class Invitee < ActiveRecord::Base
     photo.url(:original)
   end
 
+  def number_of_people_invited(event_id)
+    event_invitees.where(event_id: params[:event_id]).first.try(:number_of_people_invited) || 0
+  end
+
+  def number_of_people_brought
+    event_invitees.where(event_id: params[:event_id]).first.try(:number_of_people_brought) || 0
+  end
 end

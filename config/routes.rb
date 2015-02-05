@@ -3,6 +3,7 @@ Rails.application.routes.draw do
   root to: 'visitors#index'
   devise_for :users
   resources :users
+  get "invitee/:id/events/:event_id" => 'invitee#event_invitee_details'
   resources :invitee
   get "events/today/invitees" => 'events#search'
   get "events/all" => 'events#get_all'

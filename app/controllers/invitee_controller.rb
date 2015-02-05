@@ -14,7 +14,19 @@ class InviteeController < ApplicationController
   def show
     @invitee = Invitee.find(params[:id])
     respond_to do |format|
-      format.json {render text: @invitee.to_json(:only => [:id,:name,:family_name,:category, :region, :contact_number], :methods => [:photo_url])}
+      format.json {render text: {"invitee" => JSON.parse(@invitee.to_json(:only => [:id,:name,:family_name,:category, :region, :contact_number], :methods => [:photo_url]))}.to_json}
+      format.html {render text: "something"}
+    end
+  end
+
+  def event_invitee_details
+    @invitee = Invitee.find(params[:id])
+    event_invitee = @invitee.event_invitees.where(event_id: params[:event_id]).first
+    invitee_json = JSON.parse(@invitee.to_json(:only => [:id,:name,:family_name,:category, :region, :contact_number], :methods => [:photo_url]))
+    invitee_json[:number_of_people_invited] = event_invitee ? (event_invitee.number_of_people_invited || 0) : 0
+    invitee_json[:number_of_people_brought] = event_invitee ? (event_invitee.number_of_people_brought || 0) : 0
+    respond_to do |format|
+      format.json {render text: {"invitee" => invitee_json}.to_json}
       format.html {render text: "something"}
     end
   end
@@ -32,7 +44,8 @@ class InviteeController < ApplicationController
     Invitee.transaction do
       @invitee = Invitee.create!( secure_invitee_params )
       params[:event_invitee][:event_id].each_with_index do |event_id, i|
-        EventInvitee.create!(invitee: @invitee, event_id: event_id, number_of_people_invited: params[:event_invitee][:number_of_people_invited][i])
+        num_people = params[:event_invitee][:number_of_people_invited][i] || 0
+        EventInvitee.create!(invitee: @invitee, event_id: event_id, number_of_people_invited: num_people) if num_people > 0
       end
     end
     redirect_to :new_invitee, :notice => "Created invitee"
