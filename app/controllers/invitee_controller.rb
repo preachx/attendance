@@ -44,7 +44,7 @@ class InviteeController < ApplicationController
     Invitee.transaction do
       @invitee = Invitee.create!( secure_invitee_params )
       params[:event_invitee][:event_id].each_with_index do |event_id, i|
-        num_people = params[:event_invitee][:number_of_people_invited][i] || 0
+        num_people = params[:event_invitee][:number_of_people_invited][i].to_i
         EventInvitee.create!(invitee: @invitee, event_id: event_id, number_of_people_invited: num_people) if num_people > 0
       end
     end
