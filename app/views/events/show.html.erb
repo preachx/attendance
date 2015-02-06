@@ -7,10 +7,10 @@
   <%= button_to "Add new invitee", new_invitee_path, :class => 'button right', method: "get" %>
 </div>
 <div class="left important">
-  <%= form_for :invitee, :url => event_path, :html => { :method => :get} do |f| %>
-      <%= hidden_field(:event,:id) %>
+  <%= form_for :invitee, :url => event_path(id: @event.id), :html => { :method => :get} do |f| %>
+      <%= hidden_field(:event,:id, name: "id") %>
 <%= f.text_field :search_string, :autofocus => true, class: 'form-control' %>
-  <%= f.submit 'Search', :class => 'button right' %>>
+  <%= f.submit 'Search', :class => 'button right' %>
   <% end %>
 </div>
 <div class="column">
@@ -26,16 +26,25 @@
       <th>People invited</th>
       <th>People brought</th>
     </tr>
-    <% @event_invitees.each do |event_invitees| %>
+    <% @event_invitees.each do |event_invitee| %>
         <tr>
-          <td><%= image_tag event_invitees.invitee.photo.url(:thumb) %></td>
-          <td><%= event_invitees.invitee.name %></td>
-          <td><%= event_invitees.invitee.family_name %></td>
-          <td><%= event_invitees.invitee.category %></td>
-          <td><%= event_invitees.invitee.region %></td>
-          <td><%= event_invitees.invitee.contact_number %></td>
-          <td><%= event_invitees.number_of_people_invited %></td>
-          <td><%= event_invitees.number_of_people_brought %></td>
+          <td><%= image_tag event_invitee.invitee.photo.url(:thumb) %></td>
+          <td><%= event_invitee.invitee.name %></td>
+          <td><%= event_invitee.invitee.family_name %></td>
+          <td><%= event_invitee.invitee.category %></td>
+          <td><%= event_invitee.invitee.region %></td>
+          <td><%= event_invitee.invitee.contact_number %></td>
+          <td><%= event_invitee.number_of_people_invited %></td>
+          <% event_invitee.number_of_people_brought %>
+          <td>
+          <%= form_for :event_invitee, :url => event_update_count_path, :html => { :method => :get} do |f1| %>
+              <%= hidden_field(:event,:id, name: :event_id) %>
+              <%= hidden_field(:invitee,:id, name: :invitee_id, value: event_invitee.invitee_id) %>
+                <input class="form-control" id="event_invitee_number_of_people_brought" name="number_of_people_brought" value="<%= event_invitee.number_of_people_brought || 0 %>" type="text" />
+                <%= f1.submit 'Update', :class => 'button right' %>
+          <% end %>
+          </td>
+
         </tr>
     <% end %>
     </tbody>

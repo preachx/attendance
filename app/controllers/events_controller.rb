@@ -22,18 +22,23 @@ class EventsController < ApplicationController
   # end
 
   def update_invitee_people_count
-    event = Event.find(params[:event_id])
+    @event = Event.find(params[:event_id])
     invitee = Invitee.find(params[:invitee_id])
-    event_invitee = EventInvitee.where(event: event, invitee: invitee).first
+    event_invitee = EventInvitee.where(event: @event, invitee: invitee).first
     event_invitee.update_attribute(:number_of_people_brought, params[:number_of_people_brought])
-    respond_with({"eventInvitee" => event_invitee})
+    @id = params[:event_id]
+    respond_to do |format|
+      format.json {render text: {"eventInvitee" => event_invitee}.to_json}
+      format.html {redirect_to event_path(id: params[:event_id]), notice: "Updated Successfully"}
+    end
   end
 
   def show
     @event = Event.find(params[:id])
-    eis = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee).order("invitees.family_name")
+    eis = EventInvitee.where(event: @event).joins(:invitee).includes(:invitee)
     eis = eis.where("name like '%#{params[:invitee][:search_string]}%'") if params[:invitee] && params[:invitee][:search_string]
-    @event_invitees = eis
+    @event_invitees = eis.order(:id)
+
   end
 
   def update
