@@ -10,8 +10,9 @@ class EventsController < ApplicationController
   end
 
   def search
-    event = Event.where(event_date: Time.now.to_date).first
-    respond_with({event: event, invitees: event.invitees})
+    Time.zone = "Mumbai"
+    event = Event.where(event_date: Time.zone.now.to_date).first
+    event ? respond_with({event: event, invitees: event.invitees}) : respond_with({})
   end
   #
   # def advanced_search
